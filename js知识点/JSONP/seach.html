@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+</head>
+<body>
+    <div style="margin: 100px auto;width: 500px;position: relative">
+        <div class="row">
+            <form class="navbar-form navbar-left " role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="seach" autocomplete="off" style="width: 300px" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">提交</button>
+            </form>
+        </div>
+
+           <ul class=" dropdown-menu" id="list" style="display: block;top: 39px;width: 300px;padding:0">
+
+           </ul>
+
+    </div>
+</body>
+</html>
+<script type="text/javascript" >
+
+    //在keyup中请求ajax
+
+    var index = -1; //默认哪个都没有选中状态
+    var defaultValue =null; //输入框的默认值
+    var datas =[];
+    $("input").on('keydown',function(e){
+       if(e.keyCode ==38){
+           e.preventDefault()
+       }
+    });
+    $("input").on('keyup',function(e){
+        var  keyCode = e.keyCode;
+        if(keyCode == 38 || keyCode ==40){
+         if(keyCode == 38){
+             index--;
+             if(index == -2){
+                 index = datas.length-1
+             }
+         };
+        if(keyCode ==40){
+             index++; //当前的哪个li被选中
+            if(index == datas.length){
+                index =-1
+            }
+         }
+           if(index==-1){
+               //将原来输入的默认值保存下来
+               $(this).val(this).val(defaultValue);
+               $("#list li").removeClass("active")
+           }else {
+               $(this).val(datas[index]); //将当前的值给输入块
+               $("#list li").removeClass("active").eq(index).addClass('active');
+           }
+            return; //上下键不请求
+        }
+        if(keyCode ==13){
+            var  str = datas[index] || defaultValue; //防止没有内容  就是默认内容
+          return  window.open('https://www.baidu.com/s?wd='+str)
+        }
+       var val = $(this).val(); //获取输入框的值进行ajax请求
+        //jquery中ajax也封装了jsonp
+        $.ajax({
+            type:'get',
+            dataType:'jsonp', //类型标注成jsonp
+            url:'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+val,
+            jsonp:'cb', //百度服务端口规定  函数名叫cb
+            context:$('input'),
+            success:function(res){
+               window.defaultValue = $(this).val();
+                $("#list").empty(); //清空数据
+              datas = res.s;
+                var str = ``;
+                $.each(datas,function(index,item){
+                    console.log(item);
+                    str+=`<li><a href="javascript:;">${item}</a></li>`
+                });
+                $("#list").append(str)
+            }
+        })
+    })
+</script>

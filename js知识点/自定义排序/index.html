@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="https://cdn.bootcss.com/angular.js/1.4.6/angular.js"></script>
+
+    <style type="text/css">
+        .box{list-style: none;position: relative}
+        .box li{border: 1px solid red; float: left; margin-left: 20px;position: absolute}
+        .box li a{padding: 5px 10px;display: block;text-decoration: none;text-align: center}
+    </style>
+</head>
+<body ng-controller="wuCtrl">
+  <ul class="box">
+      <li style="left:{{a.positionLeft}};top: {{a.positionTop}}"  ng-repeat=" a in array" ><a href="javascript:;">{{a.name}}</a></li>
+  </ul>
+</body>
+</html>
+
+<script type="text/javascript">
+
+    angular.module('myApp',[]);
+    angular.module('myApp').controller('wuCtrl',function ($scope) {
+
+        $scope.array = [
+            {name:'陈伟霆1',name2:'陈伟霆1'},
+            {name:'黄子韬2'},
+            {name:'鹿晗3'},
+
+            {name:'刘诗诗4'},
+            {name:'陶辰宇5'},
+            {name:'张艺兴6'},
+
+            {name:'乔振宇7'},
+            {name:'宋茜8'},
+            {name:'迪丽热巴9'},
+
+            {name:'赵丽颖10'},
+            {name:'尹泽强11'},
+            {name:'力能12'},
+        ]
+
+    function sliceArr(array, size) {
+        var result = [];
+        for (var x = 0; x < Math.ceil(array.length / size); x++) {
+            var start = x * size;
+            var end = start + size;
+            result.push(array.slice(start, end));
+        }
+        return result;
+    }
+   var total = sliceArr($scope.array,3);
+     function classify(totals) {
+         for (var i = 0; i < totals.length; i++){
+             if (i%2 ==0){
+                 positions(0,1)
+             }else {
+                 positions(2,-1)
+             }
+         }
+         function positions(positive,negative) {
+             total[i].forEach(function (item, index, arr) {
+                 var Left= (positive+index*negative)*150;
+                 var Top = i*50;
+                 item.positionTop = Top+'px';
+                 item.positionLeft = Left+'px';
+             });
+         }
+     }
+    classify(total)
+
+});
+
+
+</script>

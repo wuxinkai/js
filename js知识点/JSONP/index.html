@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+//1 声明全局函数（必须是全局函数）
+        function fn(data){ //返回前端就执行这段代码
+//            document.body.innerHTML = data
+
+            document.body.innerHTML = data.name
+
+        }
+//2创建script标签访问其他服务器 并且告诉服务器 当前函数叫什么名字
+      var oScript = document.createElement("script");
+// 传递的是字符串 我们通过63342跨域8080  /getDtae
+   // oScript.src ='http://localhost:8080/getDate?cb=fn';  //将全局函数的名字传递给服务器
+//传递的是对象
+    oScript.src ='http://localhost:8080/getStudent?dd=fn';  //将全局函数的名字传递给服务器
+document.body.appendChild(oScript); //将script插入到页面中
+</script>
+</body>
+</html>
